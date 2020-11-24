@@ -130,7 +130,7 @@ def example4_cvxopt_explit_z():
         G,
         # maximize z st: z <= 2 F1 + 4 F2 + 5 F3
         # is the same as:
-        # minimize z st: -z >= -2f1 - 4f2 - 5f3 ---> z - 2f1 - 4f2 - 5f3 <= 0
+        # minimize -z st: -z >= -2f1 - 4f2 - 5f3 ---> z - 2f1 - 4f2 - 5f3 <= 0
         np.array([1, -2, -4, -5])
     ))
     G = co.matrix(G)
@@ -148,7 +148,7 @@ def example4_cvxopt_explit_z():
     # [ 0.  1.  1.  1.]
     # [ 1. -2. -4. -5.]]
 
-    c = co.matrix([-1.0, 0.0, 0.0, 0.0])  # minimize z
+    c = co.matrix([-1.0, 0.0, 0.0, 0.0])  # minimize -z
 
     h = co.matrix([-0.0, -0.0, -0.0, -0.0, 3000.0, 20000.0, -0.0])
 
@@ -206,9 +206,10 @@ def rock_paper_scissors_cvxopt():
                         [-1, 1, 0]], dtype=float)
 
     G = co.matrix(np.vstack((
-        # negate 'rpsrule' or not would generate the same result.
+        # negating 'rpsrule' or not would generate the same result.
         # Without negating it is calcuating the probablity for column player.
         # Since this is a zero sum game, the stragegy for both row and column player would be identical.
+        # Also note that here negating has the same effect as transposing (switch row and col).
         np.hstack((np.ones((3, 1)), - rpsrule)),
         np.hstack((np.zeros((3, 1)), - np.eye(3))),  # each P >= 0
     )))
